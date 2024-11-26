@@ -1,0 +1,60 @@
+package frontend;
+
+import entity.Department;
+import org.hibernate.Session;
+import util.HibernateUtil;
+
+import java.util.function.Consumer;
+
+public class Program {
+    public static void main(String[] args) {
+       try (var factory = HibernateUtil.buildSessionFactory()){
+            factory.inTransaction(session -> {
+                var department = new Department();
+                department.setName("Giám đốc");
+                session.persist(department);
+            });
+           factory.inTransaction(session -> {
+               var department = new Department();
+               department.setName("Bảo vệ");
+               session.persist(department);
+           });
+           
+           factory.inSession(session -> {
+               var hql = "FROM Department ";
+               var departments = session
+                        .createSelectionQuery(hql, Department.class)
+                       .getResultList();
+               for (var department : departments) {
+                   System.out.println("department = " + department);
+               }
+                   }
+                   );
+
+           factory.inSession(session -> {
+               var department = session.get(Department.class, 1);
+               System.out.println("department = " + department);
+           });
+
+           factory.inSession(session -> {
+               var  hql = "FROM Department WHERE name = :name";
+               var department = session
+                       .createSelectionQuery(hql, Department.class)
+                       .setParameter("name", "Bảo vệ")
+                       .uniqueResult();
+               System.out.println("department = " + department);
+           });
+
+           factory.inTransaction(session -> {
+               var department = session.get(Department.class, 2);
+               department.setName("Kinh doanh");
+               session.merge(department);
+           });
+
+           factory.inTransaction(session -> {
+               var department = session.get(Department.class, 1);
+               session.remove(department);
+           });
+        }
+    }
+}

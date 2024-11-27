@@ -28,6 +28,10 @@ public class Department {
     @Column(name = "name", length = 50, unique = true, nullable = false)
     private String name;
 
+    @Column(name = "type", nullable = false)
+    @Enumerated(value = EnumType.ORDINAL)
+    private Type type;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -45,5 +49,9 @@ public class Department {
     @PostPersist
     public void postPersist() {
         System.out.println("Sau khi thêm vào database");
+    }
+
+    public enum Type{
+        DEVELOPER, TESTER, SCRUM_MASTER, PROJECT_MANAGER
     }
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.val;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.io.Serializable;
@@ -14,10 +15,12 @@ import java.time.LocalDate;
 @Entity
 @ToString
 @Table(name = "group_account")
-
+@IdClass(value = GroupAccount.PrimaryKey.class)
 public class GroupAccount {
-    @EmbeddedId
-    private PrimaryKey pk;
+    @Id
+    private int accountId;
+    @Id
+    private int groupId;
 
     @Column(name = "joined_date", nullable = false, updatable = false)
     @CreationTimestamp
@@ -33,5 +36,6 @@ public class GroupAccount {
 
         @Column(name = "account_id", nullable = false)
         private int accountId;
+
     }
 }

@@ -1,6 +1,7 @@
 package entity;
 
 
+import converter.DepartmentTypeConverter;
 import jakarta.persistence.*;
 import lombok.Generated;
 import lombok.Getter;
@@ -22,14 +23,21 @@ import java.time.LocalDateTime;
 public class Department {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(
+            name = "department_id-generator",
+            sequenceName = "department_id_sequence",
+            initialValue = 5,
+            allocationSize = 2
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+    generator = "department_id_sequence")
     private int id;
 
     @Column(name = "name", length = 50, unique = true, nullable = false)
     private String name;
 
     @Column(name = "type", nullable = false)
-    @Enumerated(value = EnumType.STRING)
+    @Convert(converter = DepartmentTypeConverter.class)
     private Type type;
 
     @Column(name = "created_at", nullable = false, updatable = false)

@@ -22,6 +22,12 @@ public class Program {
                account.setEmail("thinh@gmai.com");
                account.setGroup(group);
                session.persist(account);
+
+                var account2 = new Account();
+                account2.setName("Thuy");
+                account2.setEmail("thuy@gmai.com");
+                account2.setGroup(group);
+                session.persist(account2);
             });
 
             factory.inSession(session -> {
@@ -31,21 +37,12 @@ public class Program {
                                 .getResultList();
                         for (var group : groups) {
                             System.out.println("group.getName() = " + group.getName());
-                            System.out.println("group.getGroup().getName() = " + group.getAccount().getName());
-                        }
+
+                        var accounts = group.getAccounts();
+                        for (var account : accounts){
+                            System.out.println("account.getName() = " + account.getName());
+                        }}
                     });
-           
-           factory.inSession(session -> {
-               var hql = "FROM Account";
-               var accounts = session
-                        .createSelectionQuery(hql, Account.class)
-                       .getResultList();
-               for (var account : accounts) {
-                   System.out.println("account.getName() = " + account.getName());
-                   System.out.println("account.getGroup().getName() = " + account.getGroup().getName());
-               }
-                   }
-                   );
         }
     }
 }

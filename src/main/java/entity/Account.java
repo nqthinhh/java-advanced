@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -20,11 +22,7 @@ public class Account {
     @Column( name = "email", unique = true, nullable = false)
     private String email;
 
-    @ManyToOne
-    @JoinColumn(
-            name = "group_id",
-            referencedColumnName = "id",
-            nullable = false)
-    private Group group;
+    @ManyToMany(mappedBy = "accounts")
+    private List<Group> groups;
 
 }

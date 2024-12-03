@@ -22,7 +22,7 @@ public class Account {
     @Column( name = "email", unique = true, nullable = false)
     private String email;
 
-    @ManyToMany(mappedBy = "accounts")
-    private List<Group> groups;
+    @OneToMany(mappedBy = "account")
+    private List<GroupAccount> groupAccounts;
 
 }

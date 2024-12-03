@@ -3,39 +3,29 @@ package entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import lombok.val;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
-@ToString
-@Table(name = "ga")
-@IdClass(value = GroupAccount.PrimaryKey.class)
+@Table(name = "group_account")
 public class GroupAccount {
     @Id
-    private int accountId;
-    @Id
-    private int groupId;
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-    @Column(name = "joined_date", nullable = false, updatable = false)
+    @ManyToOne
+    @JoinColumn(name = "group_id", referencedColumnName = "id", nullable = false)
+    private Group group;
+
+    @ManyToOne
+    @JoinColumn(name = "account_id", referencedColumnName = "id", nullable = false)
+    private Account account;
+
+    @Column(name = "joined_at", nullable = false, updatable = false)
     @CreationTimestamp
-    private LocalDate joinedDate;
-
-    @Getter
-    @Setter
-    @ToString
-    @Embeddable
-    public static class PrimaryKey implements Serializable {
-        @Column(name = "group_id", nullable = false)
-        private int groupId;
-
-        @Column(name = "account_id", nullable = false)
-        private int accountId;
-
-    }
+    private LocalDateTime joinedAt;
 }

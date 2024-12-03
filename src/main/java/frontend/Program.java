@@ -4,6 +4,7 @@ import entity.Account;
 import entity.Department;
 import entity.Group;
 //import entity.GroupAccount;
+import entity.GroupAccount;
 import org.hibernate.Session;
 import util.HibernateUtil;
 
@@ -32,14 +33,25 @@ public class Program {
                     account2.setEmail("thuy@gmai.com");
                     session.persist(account2);
 
-                    account.setGroups(Arrays.asList(group1,group2));
-                    account2.setGroups(Arrays.asList(group1,group2));
-                    group1.setAccounts(Arrays.asList(account2,account));
-                    group2.setAccounts(Arrays.asList(account2,account));
+                    var groupAccount1 = new GroupAccount();
+                    groupAccount1.setAccount(account);
+                    groupAccount1.setGroup(group1);
+                    session.persist(groupAccount1);
 
+                    var groupAccount2 = new GroupAccount();
+                    groupAccount2.setAccount(account2);
+                    groupAccount2.setGroup(group1);
+                    session.persist(groupAccount2);
 
-                    session.persist(group1);
-                    session.persist(group2);   // save
+                    var groupAccount3 = new GroupAccount();
+                    groupAccount3.setAccount(account);
+                    groupAccount3.setGroup(group2);
+                    session.persist(groupAccount3);
+
+                var groupAccount4 = new GroupAccount();
+                groupAccount4.setAccount(account);
+                groupAccount4.setGroup(group2);
+                session.persist(groupAccount4);
             });
 
             factory.inSession(session -> {
@@ -50,9 +62,10 @@ public class Program {
                         for (var group : groups) {
                             System.out.println("group.getName() = " + group.getName());
 
-                        var accounts = group.getAccounts();
-                        for (var account : accounts){
-                            System.out.println("account.getName() = " + account.getName());
+                        var groupAccounts = group.getGroupAccounts();
+                        for (var groupAccount : groupAccounts){
+                            System.out.println("groupAccount.getAccount().getName() = " + groupAccount.getAccount().getName());
+                            System.out.println("groupAccount.getJoinedAt() = " + groupAccount.getJoinedAt());
                         }}
                     });
         }

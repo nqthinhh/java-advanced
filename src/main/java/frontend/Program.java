@@ -13,11 +13,13 @@ public class Program {
        try (var factory = HibernateUtil.buildSessionFactory()){
             factory.inTransaction(session -> {
                 var circle = new Circle();
+                circle.setId(1);
                 circle.setColor("red");
                 circle.setRadius(5);
                 session.persist(circle);
 
                 var rectangle = new Rectangle();
+                rectangle.setId(2);
                 rectangle.setColor("blue");
                 rectangle.setWidth(3);
                 rectangle.setHeight(4);
@@ -25,7 +27,7 @@ public class Program {
 
                     });
             factory.inSession(session -> {
-                        var hql = "FROM Shape";
+                        var hql = "FROM Circle";
                         var shapes = session
                                 .createSelectionQuery(hql, Shape.class)
                                 .getResultList();
